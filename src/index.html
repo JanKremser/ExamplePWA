@@ -12,17 +12,143 @@
     <style>
         body {
             background-color: rgb(27, 27, 27);
+            font-family: 'Courier New', Courier, monospace;
             color: white;
+            margin: 0;
+        }
+
+        .app-title {
+            background-color: rgb(206, 134, 0);
+            padding: 2rem;
+
+            font-size: 2rem;
+        }
+
+        .add-form {
+            padding: 0.2rem;
+        }
+
+        .add-form input {
+            background-color: black;
+            color: white;
+            border: rgb(88, 88, 88) 0.1rem solid;
+            border-radius: 0.2rem;
+            font-size: 1.8rem;
+            width: calc(100% - 6rem);
+        }
+
+        .add-form button {
+            background-color: green;
+            color: white;
+            border: rgb(8, 46, 0) 0.1rem solid;
+            border-radius: 0.2rem;
+            font-size: 1.5rem;
+            width: 5rem;
+        }
+
+        .todo-wrapper {
+            padding: 0.5rem;
+        }
+
+        .todo {
+            background-color: black;
+            border-radius: 0.7rem;
+            border: rgb(88, 88, 88) 0.1rem solid;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .todo button {
+            background-color: red;
+            font-size: 2rem;
+            border: darkred 0.1rem solid;
+            border-radius: 0.5rem;
         }
     </style>
 
     <script>
+        function renderToDo(text) {
+            let todo = document.createElement("div");
+            todo.classList.add("todo");
 
+            let title = document.createElement("div");
+            title.classList.add("todo-title");
+            title.innerHTML = text;
+            todo.appendChild(title);
+
+            let btn = document.createElement("button");
+            btn.onclick = () => { deleteToDo(btn); }
+            btn.innerHTML = "delete";
+            todo.appendChild(btn);
+
+            document.getElementById("toDoList").appendChild(todo);
+        }
+
+        function deleteToDo(event) {
+            event.parentElement.remove();
+            updateStorage();
+        }
+
+        function addToDo() {
+            let value = document.getElementById('inputToDo').value;
+            if (value == "") {
+                alert("ToDo ist leer!");
+                return;
+            }
+
+            renderToDo(value);
+            document.getElementById('inputToDo').value = "";
+
+            updateStorage();
+        }
+
+        function updateStorage() {
+            let todos = document.getElementsByClassName("todo-title");
+
+            let cach = [];
+
+            for(todo of todos) {
+                cach.push(todo.innerHTML);
+            }
+
+            localStorage.setItem("todos", JSON.stringify(cach));
+        }
+
+        function loadStorage() {
+            let todosStr = localStorage.getItem("todos");
+
+            if(!todosStr) return;
+
+            let todos = JSON.parse(todosStr);
+
+            for(todo of todos) {
+                renderToDo(todo);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function(){
+            loadStorage();
+        });
     </script>
 </head>
 
 <body>
-    <p>Example App</p>
+    <div class="app-title">
+        Example APP
+    </div>
+
+    <div class="add-form">
+        <input type="text" placeholder="ToDo" id="inputToDo">
+        <button onclick="addToDo()">ADD</button>
+    </div>
+
+    <hr/>
+
+    <div class="todo-wrapper" id="toDoList">
+
+    </div>
+    
 </body>
 
 </html>
