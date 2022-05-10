@@ -3,7 +3,7 @@
     "background_color": "#f69435",
     "display": "fullscreen",
     "scope": "/",
-    "start_url": "/",
+    "start_url": "https://jankremser.github.io/ExamplePWA/src/",
     "name": "ExampleAPP",
     "short_name": "Example",
     "description": "Example PWA APP",
